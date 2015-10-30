@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Data">
+      <UniqueIdentifier>{05e1b962-e8b3-4365-8f03-68853e373dd1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -33,6 +36,18 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Data\Image.h">
+      <Filter>Source Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\IReadFile.h">
+      <Filter>Source Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\ReadDataTraining.h">
+      <Filter>Source Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\ReadDataTest.h">
+      <Filter>Source Files\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KNNMachineLearning.cpp">
@@ -43,6 +58,15 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\Imagecpp.cpp">
+      <Filter>Source Files\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\ReadDataTraining.cpp">
+      <Filter>Source Files\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\ReadDataTest.cpp">
+      <Filter>Source Files\Data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

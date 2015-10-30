@@ -6,6 +6,7 @@
 #include "KNNMachineLearning.h"
 #include "KNNMachineLearningDlg.h"
 #include "afxdialogex.h"
+#include "Data\ReadDataTraining.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -262,8 +263,9 @@ string CKNNMachineLearningDlg::chooserFileTestData()
 void CKNNMachineLearningDlg::OnBnClickedButton3()
 {
 	__filePathTrainingData = chooserFileTrainingData();
+	ReadDataTraining dataTraining(__filePathTrainingData, 64, 3823);
+	dataTraining.readFile();
 }
-
 
 void CKNNMachineLearningDlg::OnBnClickedButton4()
 {
