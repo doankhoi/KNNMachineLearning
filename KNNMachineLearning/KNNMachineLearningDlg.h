@@ -6,6 +6,11 @@
 #include "afxwin.h"
 #include <string>
 #include <iostream>
+#include "Data\ReadDataTraining.h"
+#include "Data\ReadDataTest.h"
+#include "Data\Utils.h"
+#include "KNN\KNN.h"
+#include "ImageProcessing\ImageProcessing.h"
 using namespace std;
 
 // CKNNMachineLearningDlg dialog
@@ -31,23 +36,27 @@ protected:
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	DECLARE_MESSAGE_MAP()
 	CComboBox cbbSelectImage;
 	CStatic imageSelectCtr;
 
 	CBitmap imageCurBitmap;
-public:
-	afx_msg void OnCbnSelchangeCombo1();
 
 private:
 	int __k;
 	string __filePathTrainingData;
 	string __filePathTestData;
+	ReadDataTest* __readDataTest;
+	ReadDataTraining* __readDataTraining;
+	ImageProcessing* __imageProcessing;
+	KNN* __knn;
 
-	void loadTextForCombobox();
+	void setK();
 	int getValueOfK();
 	string chooserFileTrainingData();
 	string chooserFileTestData();
+	
 protected:
 	CEdit editK;
 public:
@@ -57,4 +66,13 @@ protected:
 	CEdit txtFileTest;
 public:
 	afx_msg void OnBnClickedButton4();
+	afx_msg void OnBnClickedButton1();
+protected:
+	CEdit editEstimate;
+public:
+	afx_msg void OnBnClickedButton2();
+protected:
+	CEdit editResult;
+public:
+	afx_msg void OnBnClickedButton5();
 };
