@@ -13,6 +13,7 @@ class ReadDataTraining : public IReadFile
 {
 public:
 	ReadDataTraining(string filePath, int numberAttribute, int numberImage);
+	~ReadDataTraining();
 	void readFile();
 	void ReadLineOfFile(string line);
 	void setFilePath(string filePath);

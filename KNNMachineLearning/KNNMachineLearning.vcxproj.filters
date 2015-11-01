@@ -16,6 +16,12 @@
     <Filter Include="Source Files\Data">
       <UniqueIdentifier>{05e1b962-e8b3-4365-8f03-68853e373dd1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\KNN">
+      <UniqueIdentifier>{794bffc7-bedf-4aa5-b7a3-0d607b57e813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ImageProcessing">
+      <UniqueIdentifier>{165ed2ad-8e9b-4d31-9ea5-c0a78df6a317}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -48,6 +54,15 @@
     <ClInclude Include="Data\ReadDataTest.h">
       <Filter>Source Files\Data</Filter>
     </ClInclude>
+    <ClInclude Include="KNN\KNN.h">
+      <Filter>Source Files\KNN</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\Utils.h">
+      <Filter>Source Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageProcessing\ImageProcessing.h">
+      <Filter>Source Files\ImageProcessing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KNNMachineLearning.cpp">
@@ -59,14 +74,20 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Data\Imagecpp.cpp">
-      <Filter>Source Files\Data</Filter>
-    </ClCompile>
     <ClCompile Include="Data\ReadDataTraining.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
     <ClCompile Include="Data\ReadDataTest.cpp">
       <Filter>Source Files\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="KNN\KNN.cpp">
+      <Filter>Source Files\KNN</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\Image.cpp">
+      <Filter>Source Files\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageProcessing\ImageProcessing.cpp">
+      <Filter>Source Files\ImageProcessing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

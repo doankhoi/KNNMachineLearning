@@ -7,10 +7,11 @@ Image::Image()
 
 }
 
-Image::Image(vector<unsigned int> attributes, unsigned int label)
+Image::Image(vector<unsigned int> attributes, unsigned int label, float distance)
 {
 	this->setAttributes(attributes);
 	this->setLabel(label);
+	this->setDistance(distance);
 }
 
 Image::~Image()
@@ -26,6 +27,16 @@ void Image::setLabel(unsigned int label)
 unsigned int Image::getLabel()
 {
 	return this->__label;
+}
+
+void Image::setDistance(float distance) 
+{
+	this->__distance = distance;
+}
+
+float Image::getDistance()
+{
+	return this->__distance;
 }
 
 void Image::setAttributes(vector<unsigned int> attributes)

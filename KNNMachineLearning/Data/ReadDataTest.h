@@ -13,9 +13,10 @@ class ReadDataTest : public IReadFile
 {
 public:
 	ReadDataTest(string filePath, int numberAttribute, int numberImage);
+	~ReadDataTest();
 	void readFile();
 	void ReadLineOfFile(string line);
 	void setFilePath(string filePath);
 	string getFilePath();
-	vector<Image*> getDataTraining();
+	vector<Image*> getDataTest();
 };

@@ -6,7 +6,7 @@
 #include "KNNMachineLearning.h"
 #include "KNNMachineLearningDlg.h"
 #include "afxdialogex.h"
-#include "Data\ReadDataTraining.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -20,13 +20,13 @@ class CAboutDlg : public CDialogEx
 public:
 	CAboutDlg();
 
-// Dialog Data
+	// Dialog Data
 	enum { IDD = IDD_ABOUTBOX };
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
-// Implementation
+	// Implementation
 protected:
 	DECLARE_MESSAGE_MAP()
 };
@@ -57,20 +57,23 @@ CKNNMachineLearningDlg::CKNNMachineLearningDlg(CWnd* pParent /*=NULL*/)
 void CKNNMachineLearningDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_COMBO1, cbbSelectImage);
 	DDX_Control(pDX, IDC_IMAGE_CONTROL, imageSelectCtr);
 	DDX_Control(pDX, IDC_EDIT3, editK);
 	DDX_Control(pDX, IDC_EDIT1, txtNameFileTraining);
 	DDX_Control(pDX, IDC_EDIT2, txtFileTest);
+	DDX_Control(pDX, IDC_EDIT4, editEstimate);
+	DDX_Control(pDX, IDC_EDIT5, editResult);
 }
 
 BEGIN_MESSAGE_MAP(CKNNMachineLearningDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_CBN_SELCHANGE(IDC_COMBO1, &CKNNMachineLearningDlg::OnCbnSelchangeCombo1)
 	ON_BN_CLICKED(IDC_BUTTON3, &CKNNMachineLearningDlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &CKNNMachineLearningDlg::OnBnClickedButton4)
+	ON_BN_CLICKED(IDC_BUTTON1, &CKNNMachineLearningDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CKNNMachineLearningDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON5, &CKNNMachineLearningDlg::OnBnClickedButton5)
 END_MESSAGE_MAP()
 
 
@@ -108,7 +111,7 @@ BOOL CKNNMachineLearningDlg::OnInitDialog()
 	// TODO: Add extra initialization here
 
 	//Init combobox image
-	loadTextForCombobox();
+	__imageProcessing = new ImageProcessing();
 	//end Init cobobox image
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
@@ -163,55 +166,6 @@ HCURSOR CKNNMachineLearningDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-
-
-void CKNNMachineLearningDlg::OnCbnSelchangeCombo1()
-{
-	int idxSelect = cbbSelectImage.GetCurSel();
-
-	switch (idxSelect)
-	{
-	case 0:
-		break;
-	case 1:
-		imageCurBitmap.LoadBitmapW(IDB_BITMAP1);
-		break;
-	case 2:
-		break;
-	case 3:
-		break;
-	case 4:
-		break;
-	case 5:
-		break;
-	case 6:
-		break;
-	case 7:
-		break;
-	case 8:
-		break;
-	case 9:
-		break;
-	}
-
-	imageSelectCtr.SetBitmap((HBITMAP)imageCurBitmap);
-}
-
-void CKNNMachineLearningDlg::loadTextForCombobox()
-{
-	cbbSelectImage.AddString(_T("Number 0"));
-	cbbSelectImage.AddString(_T("Number 1"));
-	cbbSelectImage.AddString(_T("Number 2"));
-	cbbSelectImage.AddString(_T("Number 3"));
-	cbbSelectImage.AddString(_T("Number 4"));
-	cbbSelectImage.AddString(_T("Number 5"));
-	cbbSelectImage.AddString(_T("Number 6"));
-	cbbSelectImage.AddString(_T("Number 7"));
-	cbbSelectImage.AddString(_T("Number 8"));
-	cbbSelectImage.AddString(_T("Number 9"));
-	cbbSelectImage.SetCurSel(0);
-}
-
 int CKNNMachineLearningDlg::getValueOfK()
 {
 	CString txtEditK;
@@ -263,11 +217,134 @@ string CKNNMachineLearningDlg::chooserFileTestData()
 void CKNNMachineLearningDlg::OnBnClickedButton3()
 {
 	__filePathTrainingData = chooserFileTrainingData();
-	ReadDataTraining dataTraining(__filePathTrainingData, 64, 3823);
-	dataTraining.readFile();
+	this->__readDataTraining = new ReadDataTraining(__filePathTrainingData, NUMBER_OF_ATTRIBUTES, NUMBER_OF_IMAGES_TRAINING);
 }
 
 void CKNNMachineLearningDlg::OnBnClickedButton4()
 {
 	__filePathTestData = chooserFileTestData();
+	this->__readDataTest = new ReadDataTest(__filePathTestData, NUMBER_OF_ATTRIBUTES, NUMBER_OF_IMAGES_TEST);
+}
+
+
+void CKNNMachineLearningDlg::OnBnClickedButton1()
+{
+	//Estimate with data test
+	UpdateData(true);
+	setK();
+
+	if ((__filePathTestData.length() == 0) || (__filePathTrainingData.length() == 0) ) {
+		MessageBox(L"Please enter file training and test", L"Warring");
+		return;
+	}
+
+	if (this->__k <= 0)
+	{
+		MessageBox(L"Please enter a number k > 0", L"Warring");
+		return;
+	}
+
+	this->__knn = new KNN(__filePathTrainingData, __filePathTestData, __k);
+	float acc = __knn->estimate();
+	CString s;
+	s.Format(_T("Accuracy: %f"), acc);
+	editEstimate.SetWindowTextW(s);
+	UpdateData(false);
+}
+
+
+void CKNNMachineLearningDlg::OnBnClickedButton2()
+{
+	if (__imageProcessing->getImagePath().length() <= 0) 
+	{
+		MessageBox(L"Please select image size 32 x 32", L"Warring");
+		return;
+	}
+
+	setK();
+	if ((this->__k <= 0))
+	{
+		MessageBox(L"Please enter a number k > 0", L"Warring");
+		return;
+	}
+	if ((this->__filePathTrainingData.length() <= 0))
+	{
+		MessageBox(L"Please enter file training", L"Warring");
+		return;
+	}
+	vector<unsigned int> attr = __imageProcessing->normalizeImage();
+	Image* img = new Image(attr);
+	this->__knn = new KNN(__filePathTrainingData, __filePathTestData, __k);
+	int result = __knn->predict(img);
+	UpdateData(true);
+	CString txtResult;
+	txtResult.Format(_T("%d"), result);
+	CWnd *pWnd = GetDlgItem(IDC_EDIT5);
+	CDC *pDC   = pWnd->GetDC();
+	pDC->SetTextColor(RGB(255, 0, 0));
+	editResult.SetWindowTextW(txtResult);
+	UpdateData(false);
+}
+
+HBRUSH CKNNMachineLearningDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	if ( pWnd->m_hWnd == editResult.m_hWnd )
+	{
+		pDC->SetTextColor(RGB(255,0,0));
+		pDC->SetBkColor(RGB(255,255,255));
+		
+		hbr = (HBRUSH)GetStockObject(WHITE_BRUSH);
+	}
+
+	return hbr;
+}
+
+void CKNNMachineLearningDlg::setK()
+{
+	UpdateData(true);
+	CString txtK;
+	editK.GetWindowTextW(txtK);
+	if (txtK.GetLength() <= 0) {
+		cout << "Please enter k" << endl;
+		return;
+	}
+
+	this->__k = _tstoi(txtK);
+	UpdateData(false);
+}
+
+
+void CKNNMachineLearningDlg::OnBnClickedButton5()
+{
+	char strFilter[] = {"Text Files (*.bmp*)|*.bmp*|"};
+	CFileDialog FileDlg(FALSE, CString(".bmp*"), NULL, 0, CString(strFilter));
+	string fullpath;
+
+	while (true)
+	{
+		if (FileDlg.DoModal() == IDOK) {
+			CString filename = FileDlg.GetFileName();
+			CString filePath = FileDlg.GetFolderPath();
+			UpdateData(true);
+			fullpath = CStringA(filePath+'\\'+filename);
+			__imageProcessing->setImagePath(fullpath);
+			break;
+		}
+	}
+
+	if (fullpath.length() > 0) 
+	{
+		editResult.SetWindowTextW(L"");
+		std::wstring ws; 
+		ws.assign( fullpath.begin(), fullpath.end() );
+		HBITMAP hBitmap = (HBITMAP)LoadImage(NULL, ws.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+		if (hBitmap != NULL)
+		{
+			imageCurBitmap.Detach();
+			imageCurBitmap.Attach(hBitmap);
+			imageSelectCtr.SetBitmap(imageCurBitmap);
+		}
+	}
 }

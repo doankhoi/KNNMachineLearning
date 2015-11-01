@@ -6,6 +6,12 @@ ReadDataTraining::ReadDataTraining(string filePath, int numberAttribute, int num
 	this->_filePath = filePath;
 	this->_numberAttribute = numberAttribute;
 	this->_numberImage = numberImage;
+	this->readFile();
+}
+
+ReadDataTraining::~ReadDataTraining()
+{
+
 }
 
 void ReadDataTraining::readFile()
@@ -21,7 +27,7 @@ void ReadDataTraining::readFile()
 			k++;
 		}
 	} catch (exception e) {
-		cout <<  "Note read file training" << endl;
+		cout <<  "Not read file training" << endl;
  	}
 }
 
@@ -51,7 +57,7 @@ void ReadDataTraining::ReadLineOfFile(string line)
 	unsigned int temp;
 	int count = 0;
 
-	for(int i = 0; i < lengthLine; i++) {
+	for(unsigned int i = 0; i < lengthLine; i++) {
 		if (line.at(i) == ',') {
 			int len = (idxEnd - idxStart);
 			assert(len > 0);
