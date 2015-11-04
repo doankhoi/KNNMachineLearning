@@ -63,6 +63,7 @@ void CKNNMachineLearningDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT2, txtFileTest);
 	DDX_Control(pDX, IDC_EDIT4, editEstimate);
 	DDX_Control(pDX, IDC_EDIT5, editResult);
+	DDX_Control(pDX, IDC_COMBO1, cbbSelectDistance);
 }
 
 BEGIN_MESSAGE_MAP(CKNNMachineLearningDlg, CDialogEx)
@@ -74,6 +75,7 @@ BEGIN_MESSAGE_MAP(CKNNMachineLearningDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CKNNMachineLearningDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CKNNMachineLearningDlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON5, &CKNNMachineLearningDlg::OnBnClickedButton5)
+	ON_CBN_SELCHANGE(IDC_COMBO1, &CKNNMachineLearningDlg::OnCbnSelchangeCombo1)
 END_MESSAGE_MAP()
 
 
@@ -114,6 +116,12 @@ BOOL CKNNMachineLearningDlg::OnInitDialog()
 	__imageProcessing = new ImageProcessing();
 	//end Init cobobox image
 
+	//init combobox
+	cbbSelectDistance.AddString(L"Eclide Distance");
+	cbbSelectDistance.AddString(L"Cosin Distance");
+	//cbbSelectDistance.SetCurSel(0);
+	
+	//end init combobox
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -243,8 +251,8 @@ void CKNNMachineLearningDlg::OnBnClickedButton1()
 		MessageBox(L"Please enter a number k > 0", L"Warring");
 		return;
 	}
-
-	this->__knn = new KNN(__filePathTrainingData, __filePathTestData, __k);
+	this->__methodDistance = cbbSelectDistance.GetCurSel();
+	this->__knn = new KNN(__filePathTrainingData, __filePathTestData, __k, __methodDistance);
 	float acc = __knn->estimate();
 	CString s;
 	s.Format(_T("Accuracy: %f"), acc);
@@ -272,9 +280,10 @@ void CKNNMachineLearningDlg::OnBnClickedButton2()
 		MessageBox(L"Please enter file training", L"Warring");
 		return;
 	}
+	this->__methodDistance = cbbSelectDistance.GetCurSel();
 	vector<unsigned int> attr = __imageProcessing->normalizeImage();
 	Image* img = new Image(attr);
-	this->__knn = new KNN(__filePathTrainingData, __filePathTestData, __k);
+	this->__knn = new KNN(__filePathTrainingData, __filePathTestData, __k, __methodDistance);
 	int result = __knn->predict(img);
 	UpdateData(true);
 	CString txtResult;
@@ -346,5 +355,22 @@ void CKNNMachineLearningDlg::OnBnClickedButton5()
 			imageCurBitmap.Attach(hBitmap);
 			imageSelectCtr.SetBitmap(imageCurBitmap);
 		}
+	}
+}
+
+
+void CKNNMachineLearningDlg::OnCbnSelchangeCombo1()
+{
+	int idxSelect = cbbSelectDistance.GetCurSel();
+	switch (idxSelect)
+	{
+	case 0:
+		__methodDistance = 0;
+		break;
+	case 1:
+		__methodDistance = 1;
+		break;
+	default:
+		break;
 	}
 }
