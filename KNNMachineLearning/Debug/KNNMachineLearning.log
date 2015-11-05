@@ -1,2 +1,3 @@
-﻿  KNNMachineLearningDlg.cpp
+﻿  KNN.cpp
+e:\dat\visualstudioworkstaion\knnmachinelearning\knnmachinelearning\knn\knn.cpp(118): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
   KNNMachineLearning.vcxproj -> E:\dat\VisualStudioWorkstaion\KNNMachineLearning\Debug\KNNMachineLearning.exe

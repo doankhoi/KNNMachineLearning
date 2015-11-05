@@ -47,6 +47,7 @@ private:
 	int __k;
 	string __filePathTrainingData;
 	string __filePathTestData;
+	int __methodDistance;
 	ReadDataTest* __readDataTest;
 	ReadDataTraining* __readDataTraining;
 	ImageProcessing* __imageProcessing;
@@ -75,4 +76,7 @@ protected:
 	CEdit editResult;
 public:
 	afx_msg void OnBnClickedButton5();
+	afx_msg void OnCbnSelchangeCombo1();
+protected:
+	CComboBox cbbSelectDistance;
 };

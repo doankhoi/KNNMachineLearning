@@ -14,13 +14,15 @@ private:
 	string __filePathTraining;
 	string __filePathTest;
 	int __k;
+	int __methodDistance;
 
 	vector<Image*> __dataTraining;
 	vector<Image*> __dataTest;
 
 	string __txtEstimate;
 public:
-	KNN(string filePathTraining, string filePathTest, int k);
+	KNN(string filePathTraining, string filePathTest, int k, int method);
+	~KNN();
 	float estimate();
 	int predict(Image* example); 
 
@@ -28,4 +30,5 @@ public:
 	string getTxtEstimate();
 private:
 	float __euclidDistance(Image* image1, Image* image2);
+	float __cosinDistance(Image* image1, Image* image2);
 };
